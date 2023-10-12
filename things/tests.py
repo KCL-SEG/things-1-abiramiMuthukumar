@@ -37,6 +37,54 @@ class ThingModelTest(TestCase):
         self.thing.name = 'x' * 31
         self._assert_thing_is_invalid()
 
+    def test_description_can_be_not_unique(self):
+        self.another_thing = Thing(
+            name='another thing',
+            description='This is the description of the other thing',
+            quantity=5
+        )
+        self.another_thing.save()
+        self.thing.description = 'This is the description of the other thing'
+        self._assert_thing_is_valid()
+
+    def test_description_may_be_blank(self):
+        self.thing.description = ''
+        self._assert_thing_is_valid()
+
+    def test_description_may_be_120_characters(self):
+        self.thing.description = 'x' * 120
+        self._assert_thing_is_valid()
+
+    def test_description_may_not_be_121_characters(self):
+        self.thing.description = 'x' * 121
+        self._assert_thing_is_invalid()
+
+    def test_quality_can_be_not_unique(self):
+        self.another_thing = Thing(
+            name='another thing',
+            description='This is the description of the other thing',
+            quantity=10
+        )
+        self.another_thing.save()
+        self.thing.quantity = 10
+        self._assert_thing_is_valid()
+
+    def test_quantity_may_be_0(self):
+        self.thing.quantity = 0
+        self._assert_thing_is_valid()
+
+    def test_quantity_may_be_100(self):
+        self.thing.quantity = 100
+        self._assert_thing_is_valid()
+
+    def test_quantity_may_not_be_negative(self):
+        self.thing.quantity = -1
+        self._assert_thing_is_invalid()
+
+    def test_quantity_may_not_be_101(self):
+        self.thing.quantity = 101
+        self._assert_thing_is_invalid()
+
     def _assert_thing_is_valid(self):
         try:
             self.thing.full_clean()
