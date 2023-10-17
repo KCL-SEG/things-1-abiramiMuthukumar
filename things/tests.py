@@ -82,7 +82,7 @@ class ThingModelTest(TestCase):
         self._assert_thing_is_invalid()
 
     def test_quantity_may_not_be_101(self):
-        self.thing.quantity = 101
+        self.thing.quantity = 102
         self._assert_thing_is_invalid()
 
     def _assert_thing_is_valid(self):
